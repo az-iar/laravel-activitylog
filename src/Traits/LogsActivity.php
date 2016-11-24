@@ -32,7 +32,7 @@ trait LogsActivity
                 app(ActivityLogger::class)
                     ->useLog($logName)
                     ->performedOn($model)
-                    ->withProperties($model->attributeValuesToBeLogged($eventName))
+                    ->withProperties($model->attributevaluestobelogged($eventName))
                     ->log($description);
             });
         });
