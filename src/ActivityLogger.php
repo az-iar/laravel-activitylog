@@ -36,13 +36,13 @@ class ActivityLogger
 
         $this->properties = collect();
 
-        $authDriver = $config['laravel-activitylog']['default_auth_driver'] ?? $auth->getDefaultDriver();
+        $authDriver = $config['laravel-activitylog']['default_auth_driver'] ?: $auth->getDefaultDriver();
 
         $this->causedBy = $auth->guard($authDriver)->user();
 
         $this->logName = $config['laravel-activitylog']['default_log_name'];
 
-        $this->logEnabled = $config['laravel-activitylog']['enabled'] ?? true;
+        $this->logEnabled = $config['laravel-activitylog']['enabled'] ?: true;
     }
 
     public function performedOn(Model $model)
