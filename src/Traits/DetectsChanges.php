@@ -22,7 +22,7 @@ trait DetectsChanges
         }
     }
 
-    public function attributesToBeLogged(): array
+    public function attributesToBeLogged()
     {
         if (! isset(static::$logAttributes)) {
             return [];
@@ -31,7 +31,7 @@ trait DetectsChanges
         return static::$logAttributes;
     }
 
-    public function attributeValuesToBeLogged(string $processingEvent): array
+    public function attributeValuesToBeLogged(string $processingEvent)
     {
         if (! count($this->attributesToBeLogged())) {
             return [];
@@ -48,7 +48,7 @@ trait DetectsChanges
         return $properties;
     }
 
-    public static function logChanges(Model $model): array
+    public static function logChanges(Model $model)
     {
         return collect($model)->only($model->attributesToBeLogged())->toArray();
     }

@@ -15,16 +15,16 @@ class ActivitylogServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/../config/laravel-activitylog.php' => config_path('laravel-activitylog.php'),
+            __DIR__ . '/../config/laravel-activitylog.php' => config_path('laravel-activitylog.php'),
         ], 'config');
 
-        $this->mergeConfigFrom(__DIR__.'/../config/laravel-activitylog.php', 'laravel-activitylog');
+        $this->mergeConfigFrom(__DIR__ . '/../config/laravel-activitylog.php', 'laravel-activitylog');
 
-        if (! class_exists('CreateActivityLogTable')) {
+        if (!class_exists('CreateActivityLogTable')) {
             $timestamp = date('Y_m_d_His', time());
 
             $this->publishes([
-                __DIR__.'/../migrations/create_activity_log_table.php.stub' => database_path("/migrations/{$timestamp}_create_activity_log_table.php"),
+                __DIR__ . '/../migrations/create_activity_log_table.php.stub' => database_path("/migrations/{$timestamp}_create_activity_log_table.php"),
             ], 'migrations');
         }
     }
@@ -41,20 +41,20 @@ class ActivitylogServiceProvider extends ServiceProvider
         ]);
     }
 
-    public static function determineActivityModel(): string
+    public static function determineActivityModel()
     {
         $activityModel = config('laravel-activitylog.activity_model') != null ?
             config('laravel-activitylog.activity_model') :
             Activity::class;
 
-        if (! is_a($activityModel, Activity::class, true)) {
+        if (!is_a($activityModel, Activity::class, true)) {
             throw InvalidConfiguration::modelIsNotValid($activityModel);
         }
 
         return $activityModel;
     }
 
-    public static function getActivityModelInstance(): Model
+    public static function getActivityModelInstance()
     {
         $activityModelClassName = self::determineActivityModel();
 

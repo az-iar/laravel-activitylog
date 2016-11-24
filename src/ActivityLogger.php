@@ -90,25 +90,25 @@ class ActivityLogger
 
     /**
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return $this
      */
-    public function withProperty(string $key, $value)
+    public function withProperty($key, $value)
     {
         $this->properties->put($key, $value);
 
         return $this;
     }
 
-    public function useLog(string $logName)
+    public function useLog($logName)
     {
         $this->logName = $logName;
 
         return $this;
     }
 
-    public function inLog(string $logName)
+    public function inLog($logName)
     {
         return $this->useLog($logName);
     }
@@ -118,9 +118,9 @@ class ActivityLogger
      *
      * @return null|mixed
      */
-    public function log(string $description)
+    public function log($description)
     {
-        if (! $this->logEnabled) {
+        if (!$this->logEnabled) {
             return;
         }
 
@@ -152,7 +152,7 @@ class ActivityLogger
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    protected function normalizeCauser($modelOrId): Model
+    protected function normalizeCauser($modelOrId)
     {
         if ($modelOrId instanceof Model) {
             return $modelOrId;
@@ -165,14 +165,14 @@ class ActivityLogger
         throw CouldNotLogActivity::couldNotDetermineUser($modelOrId);
     }
 
-    protected function replacePlaceholders(string $description, Activity $activity): string
+    protected function replacePlaceholders($description, Activity $activity)
     {
         return preg_replace_callback('/:[a-z0-9._-]+/i', function ($match) use ($activity) {
             $match = $match[0];
 
-            $attribute = (string) string($match)->between(':', '.');
+            $attribute = (string)string($match)->between(':', '.');
 
-            if (! in_array($attribute, ['subject', 'causer', 'properties'])) {
+            if (!in_array($attribute, ['subject', 'causer', 'properties'])) {
                 return $match;
             }
 

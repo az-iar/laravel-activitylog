@@ -18,7 +18,7 @@ class Activity extends Eloquent
         'properties' => 'collection',
     ];
 
-    public function subject(): MorphTo
+    public function subject()
     {
         if (config('laravel-activitylog.subject_returns_soft_deleted_models')) {
             return $this->morphTo()->withTrashed();
@@ -27,7 +27,7 @@ class Activity extends Eloquent
         return $this->morphTo();
     }
 
-    public function causer(): MorphTo
+    public function causer()
     {
         return $this->morphTo();
     }
@@ -39,19 +39,27 @@ class Activity extends Eloquent
      *
      * @return mixed
      */
-    public function getExtraProperty(string $propertyName)
+    public function getExtraProperty($propertyName)
     {
         return array_get($this->properties->toArray(), $propertyName);
     }
 
-    public function getChangesAttribute(): Collection
+    /**
+     * @return Collection
+     */
+    public function getChangesAttribute()
     {
         return collect(array_filter($this->properties->toArray(), function ($key) {
             return in_array($key, ['attributes', 'old']);
         }, ARRAY_FILTER_USE_KEY));
     }
 
-    public function scopeInLog(Builder $query, ...$logNames): Builder
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array ...$logNames
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeInLog(Builder $query, ...$logNames)
     {
         if (is_array($logNames[0])) {
             $logNames = $logNames[0];
@@ -68,7 +76,7 @@ class Activity extends Eloquent
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeCausedBy(Builder $query, Model $causer): Builder
+    public function scopeCausedBy(Builder $query, Model $causer)
     {
         return $query
             ->where('causer_type', get_class($causer))
@@ -83,7 +91,7 @@ class Activity extends Eloquent
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeForSubject(Builder $query, Model $subject): Builder
+    public function scopeForSubject(Builder $query, Model $subject)
     {
         return $query
             ->where('subject_type', get_class($subject))

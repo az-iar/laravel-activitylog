@@ -8,13 +8,13 @@ use Spatie\Activitylog\Models\Activity;
 
 trait CausesActivity
 {
-    public function activity(): MorphMany
+    public function activity()
     {
         return $this->morphMany(ActivitylogServiceProvider::determineActivityModel(), 'causer');
     }
 
     /** @deprecated Use activity() instead */
-    public function loggedActivity(): MorphMany
+    public function loggedActivity()
     {
         return $this->activity();
     }
